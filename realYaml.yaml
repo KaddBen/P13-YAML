@@ -1,0 +1,140 @@
+swagger: '2.0'
+info:
+  title: Bank Argent API documentation
+  description: Contains all available API endpoints in this codebase
+  version: 1.0.0
+  termsOfService: http://swagger.io/terms/
+host: localhost:3001
+basePath: /api/v1
+schemes:
+  - http
+paths:
+  /transactions:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: User Transactions API
+      description: API for retrieving all transactions of the user
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: All transactions successfully retrieved
+          schema:
+           type: "array"
+           items:
+            $ref: '#/definitions/TransactionsResponse'
+  
+  /transactions/{transactionId}:
+   
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: User Transactions API
+      description: API for updating a user profile
+      parameters:
+        - in: body
+          name: transaction
+          schema:
+           $ref: '#/definitions/Transactions'
+          required: true
+        - in: path
+          type: string
+          name: transactionId
+          required: true
+      produces:
+        - application/json
+      responses:
+        '203':
+          description: Transaction successfully updated !
+        '400':
+          description:  Invalid fields
+        '422':
+          description: Unprocessable entity
+        '404':
+          description: Not found
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: User Transactions API
+      description: API for updating a user profile
+      parameters:
+        - in: path
+          type: string
+          name: transactionId
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          schema:
+           $ref: '#/definitions/TransactionsResponse'
+        '404':
+          description: Not Found
+  /user/login:
+    post:
+      tags:
+        - Transaction Module
+      summary: User login API
+      description: API to get the authorization token
+      parameters:
+        - name: login
+          required: true
+          in: body
+          description: Login fields
+          schema:
+           $ref: '#/definitions/Login'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: User profile retrieved successully
+          schema:
+           $ref: '#/definitions/LoginResponse'
+        '400':
+          description: Invalid Fields
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+   TransactionsResponse:
+    type: object
+    properties:
+      transactionId:
+        type: string
+      name:
+        type: string
+      amount:
+        type: integer
+      category:
+        type: string
+      note:
+        type: string
+   Transactions:
+    type: object
+    properties:
+      category:
+        type: string
+      note:
+        type: string
+   Login:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+   LoginResponse:
+    type: object
+    properties:
+      token:
+        type: string
